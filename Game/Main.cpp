@@ -1,5 +1,10 @@
 #include "Engine.h"
 #include "Core/File.h"
+#include "Renderer/Shader.h"
+#include "Renderer/VertexBuffer.h"
+#include "Renderer/Pipeline.h"
+
+#include "Resources/ResourceManager.h"
 
 
 using namespace nu;
@@ -14,13 +19,25 @@ using namespace nu;
 //    Object& operator = (const Object& object) { std::cout << "assignment\n"; return *this; }
 //};
 
-uint32_t seed = 1234;
-
-uint32_t RNG()
+namespace nu
 {
-    seed = (seed * 1103515245) + 12345;
-    return seed;
+    struct Color4
+    {
+        float r, g, b, a;
+    };
 }
+struct Vertex
+{
+    Vector3 position;
+    Color4 color;
+};
+
+std::vector<Vertex> vertices =
+{
+    Vertex{ Vector3{ -1.0f, -1.0f, 0.0f}, Color4{1,0,0,1}}, // Bottom-Left
+    Vertex{  Vector3{1.0f, -1.0f, 0.0f}, Color4{0,1,0,1}}, // Bottom-Right
+    Vertex{  Vector3{0.0f,  1.0f, 0.0f}, Color4{0,0,1,1}}, // Top-Middle
+};
 
 /*class ICreator
 {
@@ -322,6 +339,24 @@ int main()
     // INITALIZATION
     Engine::Get().Initialize();
 
+    auto vb = std::make_shared<VertexBuffer>();
+    vb->Create<Vertex>(vertices, Engine::Get().GetRenderer().GetGPUDevice());
+
+    auto vshader = Resources().Get<nu::Shader>("shaders/position.vert", Engine::Get().GetRenderer(), 1);
+    auto fshader = Resources().Get<nu::Shader>("shaders/color.frag", Engine::Get().GetRenderer(), 1);
+
+    auto pipeline = std::make_shared<Pipeline>();
+    pipeline->AddVertexBuffer(sizeof(Vertex));
+    // color
+    pipeline->AddVertexAttribute(
+        1,
+        SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4,
+        offsetof(Vertex, color));
+
+    pipeline->Create(*vshader.get(), *fshader.get(),
+        Engine::Get().GetRenderer().GetGPUDevice(),
+        Engine::Get().GetRenderer().GetWindow());
+
     //std::unique_ptr game = std::make_unique<SpaceGame>();
 
 
@@ -343,6 +378,9 @@ int main()
     // create texture, using shared_ptr so texture can be shared
     //std::shared_ptr<Texture> texture = std::make_shared<Texture>();
     //texture->Load("textures/spaceship_BLUE.png", Engine::Get().GetRenderer());
+
+    float scale = 0.5f;
+    Color4 color{ 0,0,0,1 };
 
     // MANE LOOP
     bool quit = false;
@@ -366,15 +404,18 @@ int main()
         Engine::Get().Update();
         float dt = Engine::Get().GetTime().GetDeltaTime();
 
+        scale = sin(Engine::Get().GetTime().GetTime());
+        color.r = sin(Engine::Get().GetTime().GetTime() * 10.0f) * 0.5f * 0.5f;
 
-        audio->update();
+        // RENDER
+        Engine::Get().GetRenderer().BeginFrame();
 
-        // DRAW
-        Engine::Get().GetRenderer().BeginFrame();;
+        Engine::Get().GetRenderer().SetPipeline(*pipeline);
+        Engine::Get().GetRenderer().SetVertexBuffer(*vb);
+        Engine::Get().GetRenderer().SetVertexUniform(0, &scale, sizeof(scale));
+        Engine::Get().GetRenderer().SetFramentUniform(0, &color, sizeof(color));
 
-        
-
-        Engine::Get().GetPS().Draw(Engine::Get().GetRenderer());
+        Engine::Get().GetRenderer().Draw(vb->GetVertexCount());
 
         Engine::Get().GetRenderer().EndFrame();
     }

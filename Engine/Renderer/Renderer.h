@@ -17,7 +17,7 @@ namespace nu
 		void Present();
 
 		bool BeginFrame();
-		bool EndFrame() const;
+		bool EndFrame();
 
 		void SetColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255) const;
 		void SetColor(float r, float g, float b, float a = 1.0f) const;
@@ -34,9 +34,20 @@ namespace nu
 		int GetWidth() const { return m_width; }
 		int GetHeight() const { return m_height; }
 
+		SDL_GPUDevice* GetGPUDevice() const { return m_gpuDevice; }
+		SDL_Window* GetWindow() const { return m_window; }
+
+		void SetPipeline(const class Pipeline& pipeline);
+		void SetVertexBuffer(const class VertexBuffer& vertexBuffer);
+		void Draw(uint32_t vertexCount);
+
+		void SetVertexUniform(uint32_t slot, const void* data, uint32_t size);
+		void SetFramentUniform(uint32_t slot, const void* data, uint32_t size);
+
 		friend class Text;
 		friend class Texture;
-
+		friend class Shader;
+		
 	private:
 		SDL_Window* m_window = nullptr;
 		SDL_Renderer* m_renderer = nullptr;

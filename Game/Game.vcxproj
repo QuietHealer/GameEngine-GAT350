@@ -102,6 +102,10 @@
       <AdditionalOptions>/WHOLEARCHIVE:Engine.lib %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>;$(SolutionDir)ThirdParty\box2d\lib</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -120,6 +124,10 @@
       <AdditionalOptions>/WHOLEARCHIVE:Engine.lib %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>;$(SolutionDir)ThirdParty\box2d\lib</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -137,6 +145,10 @@
       <AdditionalDependencies>sdl3.lib;sdl3_ttf.lib;sdl3_image.lib;box2dd.lib</AdditionalDependencies>
       <AdditionalOptions>/WHOLEARCHIVE:Engine.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -155,6 +167,10 @@
       <AdditionalOptions>/WHOLEARCHIVE:Engine.lib %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>;$(SolutionDir)ThirdParty\box2d\lib</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Assets.cpp" />
@@ -163,6 +179,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Engine\Engine.vcxproj">
       <Project>{c9a1f7d9-4c3c-4765-8d13-ed76c8e0f76c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Shaders\Shaders.vcxproj">
+      <Project>{1dc1933f-925a-3eb9-ac2e-61b6862b1f0c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
