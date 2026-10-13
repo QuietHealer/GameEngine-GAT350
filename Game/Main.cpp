@@ -27,7 +27,7 @@ std::vector<Vertex> vertices =
 {
     Vertex{ Vector3{ -1.0f, -1.0f, 0.0f}, Color4{1,0,0,1}}, // Bottom-Left
     Vertex{  Vector3{1.0f, -1.0f, 0.0f}, Color4{0,1,0,1}}, // Bottom-Right
-    Vertex{  Vector3{0.0f,  1.0f, 0.0f}, Color4{0,0,1,1}}, // Top-Middle
+    Vertex{  Vector3{0.0f,  1.0f, 1.0f}, Color4{0,0,1,1}}, // Top-Middle
 };
 
 
