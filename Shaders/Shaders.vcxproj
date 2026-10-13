@@ -18,6 +18,10 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="color.frag.hlsl" />
+    <FxCompile Include="position.vert.hlsl" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{1DC1933F-925A-3EB9-AC2E-61B6862B1F0C}</ProjectGuid>
@@ -84,10 +88,6 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <FxCompile Include="..\_Shaders\color.frag.hlsl" />
-    <FxCompile Include="..\_Shaders\position.vert.hlsl" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
