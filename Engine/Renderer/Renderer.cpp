@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Pipeline.h"
 #include "VertexBuffer.h"
+#include "IndexBuffer.h"
 
 #include "Math/MathUtils.h"
 #include "Math/Rect.h"
@@ -31,6 +32,7 @@ namespace nu
             return false;
         }
 
+        SDL_SetHint(SDL_HINT_GPU_DRIVER, "vulkan");
         SDL_GPUShaderFormat formats = SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL;
         m_gpuDevice = SDL_CreateGPUDevice(formats, true, nullptr);
         if (!m_gpuDevice)
@@ -42,6 +44,8 @@ namespace nu
         }
 
         SDL_ClaimWindowForGPUDevice(m_gpuDevice, m_window);
+
+        CreateDepthTexture();
 
         std::cout << "GPU Driver: " << SDL_GetGPUDeviceDriver(m_gpuDevice) << std::endl;
 
@@ -94,7 +98,16 @@ namespace nu
             color_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
             color_target_info.store_op = SDL_GPU_STOREOP_STORE;
 
-            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, nullptr);
+            // configure the depth target (This handles the depth sorting)
+            SDL_GPUDepthStencilTargetInfo depth_target_info = {};
+            depth_target_info.texture = m_depthTexture;
+            depth_target_info.clear_depth = 1.0f;
+            depth_target_info.load_op = SDL_GPU_LOADOP_CLEAR;
+            depth_target_info.store_op = SDL_GPU_STOREOP_DONT_CARE;
+            depth_target_info.stencil_load_op = SDL_GPU_LOADOP_DONT_CARE;
+            depth_target_info.stencil_store_op = SDL_GPU_STOREOP_DONT_CARE;
+
+            m_renderPass = SDL_BeginGPURenderPass(m_commandBuffer, &color_target_info, 1, &depth_target_info);
         }
 
         return true;
@@ -149,70 +162,6 @@ namespace nu
         SDL_RenderLine(m_renderer, x1, y1, x2, y2);
     }
 
-    void Renderer::DrawModel(const Model& model, const Transform& transform) const
-    {
-
-        for (auto mesh : model.GetMeshes())
-        {
-            SetColor(mesh.GetColor().r, mesh.GetColor().g, mesh.GetColor().b, 1.0f);
-            auto& points = mesh.GetPoints();
-
-            for (int i = 0; i + 1 < points.size(); i++)
-            {
-                // local space
-                Vector2 v1 = points[i];
-                Vector2 v2 = points[i + 1];
-
-                // local space -> world space
-                v1 *= transform.scale;
-                v2 *= transform.scale;
-
-                v1 = v1.Rotate(transform.rotation * DegToRad);
-                v2 = v2.Rotate(transform.rotation * DegToRad);
-
-                v1 += transform.position;
-                v2 += transform.position;
-
-                DrawLine(v1.x, v1.y, v2.x, v2.y);
-            }
-        }
-
-    }
-
-    void Renderer::DrawTexture(const class Texture& texture, float x, float y, float angle, float scale, bool flipH, const Vector2& origin) const
-    {
-        Vector2 size = texture.GetSize();
-
-        SDL_FRect destRect;
-        destRect.w = size.x * scale;
-        destRect.h = size.y * scale;
-
-        destRect.x = x - (destRect.w * origin.x);
-        destRect.y = y - (destRect.h * origin.y);
-
-        // https://wiki.libsdl.org/SDL3/SDL_RenderTexture
-        SDL_RenderTextureRotated(m_renderer, texture.m_texture, NULL, &destRect, angle, NULL, (flipH) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-    }
-
-    void Renderer::DrawTexture(const Texture& texture, const Rect& source, float x, float y, float angle, float scale, bool flipH, const Vector2& origin) const
-    {
-        SDL_FRect sourceRect;
-        sourceRect.x = source.x;
-        sourceRect.y = source.y;
-        sourceRect.w = source.w;
-        sourceRect.h = source.h;
-
-        SDL_FRect destRect;
-        destRect.w = source.w * scale;
-        destRect.h = source.h * scale;
-
-        destRect.x = x - (destRect.w * origin.x);
-        destRect.y = y - (destRect.h * origin.y);
-
-        // https://wiki.libsdl.org/SDL3/SDL_RenderTexture
-        SDL_RenderTextureRotated(m_renderer, texture.m_texture, &sourceRect, &destRect, angle, NULL, (flipH) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-    }
-
     void Renderer::SetPipeline(const Pipeline& pipeline)
     {
         // bind the pipeline to the current render pass with SDL_BindGPUGraphicsPipeline(renderPass, gpuPipeline)
@@ -242,6 +191,28 @@ namespace nu
         );
     }
 
+    void Renderer::SetIndexBuffer(const IndexBuffer& indexBuffer)
+    {
+        SDL_GPUBufferBinding binding{
+            .buffer = indexBuffer.m_gpuBuffer, // todo: the vertex buffer's gpu buffer
+            .offset = 0   // start reading at the beginning of the buffer
+        };
+
+        // bind the vertex buffer to the current render pass with SDL_BindGPUVertexBuffers()
+        // the draw calls that follow read their vertices from this buffer
+        // parameters:
+        //   render pass   - the current render pass (m_renderPass)
+        //   first slot    - 0, matches the buffer slot set in Pipeline::AddVertexBuffer()
+        //   bindings      - pointer to the binding above
+        //   binding count - 1, we are binding one buffer
+
+        SDL_BindGPUIndexBuffer(
+            m_renderPass, 
+            &binding, 
+            SDL_GPU_INDEXELEMENTSIZE_32BIT
+        );
+    }
+
     void Renderer::Draw(uint32_t vertexCount)
     {
         // draw using the currently bound pipeline and vertex buffer with SDL_DrawGPUPrimitives()
@@ -254,6 +225,12 @@ namespace nu
 
         SDL_DrawGPUPrimitives(m_renderPass, vertexCount, 1, 0, 0);
     }
+
+    void Renderer::DrawIndex(const IndexBuffer& indexBuffer)
+    {
+        SDL_DrawGPUIndexedPrimitives(m_renderPass, indexBuffer.GetindexCount(), 1, 0, 0, 0);
+    }
+
     void Renderer::SetVertexUniform(uint32_t slot, const void* data, uint32_t size)
     {
         SDL_PushGPUVertexUniformData(m_commandBuffer, slot, data, size);
@@ -262,5 +239,33 @@ namespace nu
     void Renderer::SetFramentUniform(uint32_t slot, const void* data, uint32_t size)
     {
         SDL_PushGPUFragmentUniformData(m_commandBuffer, slot, data, size);
+    }
+
+    void Renderer::SetFragmentTexture(uint32_t slot, const Texture& texture)
+    {
+        SDL_GPUTextureSamplerBinding binding
+        {
+            .texture = texture.m_gpuTexture,
+            .sampler = texture.m_gpuSampler
+        };
+
+        SDL_BindGPUFragmentSamplers(m_renderPass, slot, &binding, 1);
+    }
+
+    void Renderer::CreateDepthTexture()
+    {
+        // configure the depth target (This handles the depth sorting)
+        SDL_GPUTextureCreateInfo depthInfo{
+           .type = SDL_GPU_TEXTURETYPE_2D,
+           .format = SDL_GPU_TEXTUREFORMAT_D32_FLOAT,
+           .usage = SDL_GPU_TEXTUREUSAGE_DEPTH_STENCIL_TARGET,
+           .width = (uint32_t)m_width,
+           .height = (uint32_t)m_height,
+           .layer_count_or_depth = 1,
+           .num_levels = 1,
+           .sample_count = SDL_GPU_SAMPLECOUNT_1
+        };
+
+        m_depthTexture = SDL_CreateGPUTexture(m_gpuDevice, &depthInfo);
     }
 }

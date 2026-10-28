@@ -9,7 +9,7 @@
 #include "Renderer/Texture.h"
 #include "Core/StringUtils.h"
 
-#include "Renderer/Text.h"
+
 #include "Core/Factory.h"
 
 #include "Renderer/Renderer.h"
@@ -27,7 +27,6 @@
 #include "Framework/Game.h"
 #include "fmod.hpp"
 #include "Framework/Object.h"
-#include "Physics/Physcs.h"
 
 
 #define ENGINE			Engine::Get()
@@ -53,7 +52,6 @@ namespace nu
 		Engine& operator = (const Engine&) = delete;
 
 		Audio& GetAudio() { return m_audio; }
-		Physics& GetPhysics() { return m_physics; }
 
 	private:
 		Engine() = default;
@@ -64,7 +62,6 @@ namespace nu
 		Audio m_audio;
 		ParticleSystem m_particleSystem;
 		Time m_time;
-		Physics m_physics;
 	};
 }
 

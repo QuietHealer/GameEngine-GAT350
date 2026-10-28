@@ -63,9 +63,6 @@
     <ClInclude Include="Components\ColliderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\CircleColliderComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Math\MathUtils.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -80,12 +77,6 @@
     </ClInclude>
     <ClInclude Include="Math\Rect.h">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\TextureFrames.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\Physcs.h">
-      <Filter>Physics</Filter>
     </ClInclude>
     <ClInclude Include="Serialization\Json.h">
       <Filter>Serialization</Filter>
@@ -103,9 +94,6 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\ParticleSystem.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\Text.h">
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Renderer\Texture.h">
@@ -156,30 +144,6 @@
     <ClInclude Include="Components\PhysicsComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Components\SpriteRendererComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\SpriteAnimationRendererComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\RigidBodyPhysicsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Physics\PhysicsBody.h">
-      <Filter>Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Box2DPhysicsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer\Tilemap.h">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\SpriteAnimatorRendererComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\TilemapRendererComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer\VertexBuffer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
@@ -189,6 +153,9 @@
     <ClInclude Include="Renderer\Pipeline.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Renderer\IndexBuffer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -196,18 +163,6 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\CircleColliderComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\SpriteRendererComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\TextureFrames.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\Physics.cpp">
-      <Filter>Physics</Filter>
     </ClCompile>
     <ClCompile Include="Serialization\Json.cpp">
       <Filter>Serialization</Filter>
@@ -225,9 +180,6 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\ParticleSystem.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\Text.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\Texture.cpp">
@@ -257,27 +209,6 @@
     <ClCompile Include="Components\PhysicsComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Components\SpriteAnimationRendererComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\RigidBodyPhysicsComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Physics\PhysicsBody.cpp">
-      <Filter>Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\SpriteAnimatorRendererComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\TilemapRendererComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\Box2DPhysicsComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer\Tilemap.cpp">
-      <Filter>Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer\VertexBuffer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
@@ -285,6 +216,9 @@
       <Filter>Renderer</Filter>
     </ClCompile>
     <ClCompile Include="Renderer\Pipeline.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\IndexBuffer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
   </ItemGroup>

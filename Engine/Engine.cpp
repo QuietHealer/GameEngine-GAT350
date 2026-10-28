@@ -13,7 +13,6 @@ namespace nu
 		m_particleSystem.Initialize();
 		m_audio.Initialize();
 		m_input.Initialize();
-		m_physics.Initialize();
 
 		return true;
 	}
@@ -24,7 +23,6 @@ namespace nu
 		m_audio.Shutdown();
 		m_particleSystem.Shutdown();
 		m_renderer.Shutdown();
-		m_physics.Shutdown();
 	}
 
 	void Engine::Update()
@@ -32,7 +30,6 @@ namespace nu
 		m_time.Tick();
 		m_input.Update();
 		m_particleSystem.Update(m_time.GetDeltaTime());
-		m_physics.Update(m_time.GetDeltaTime());
 	}
 
 }

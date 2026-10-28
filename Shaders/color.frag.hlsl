@@ -16,7 +16,7 @@ struct Output
 Output main(Input input)
 {
 	Output output;
-    output.Color = color; //float4(1.0f, 0.0f, 0.0f, 1.0f);
+    output.Color = input.color; //float4(1.0f, 0.0f, 0.0f, 1.0f);
 
 	return output;
 }

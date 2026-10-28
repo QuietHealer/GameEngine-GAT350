@@ -23,6 +23,8 @@ namespace nu
         void AddVertexBuffer(uint32_t pitch);
         void AddVertexAttribute(uint32_t location, SDL_GPUVertexElementFormat format, uint32_t offset);
 
+        //void ADDIndexBuffer();
+
         friend class Renderer;
 
     private:
