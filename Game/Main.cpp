@@ -35,8 +35,8 @@ int main()
     auto model = Resources().Get<Model>("models/spot.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/spot_diffuse.png", Engine::Get().GetRenderer());
 
-    auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
-    auto fshader = Resources().Get<nu::Shader>("shaders/phong.frag", Engine::Get().GetRenderer(), 3, 1);
+    auto vshader = Resources().Get<nu::Shader>("shaders/gouraud.vert", Engine::Get().GetRenderer(), 3);
+    auto fshader = Resources().Get<nu::Shader>("shaders/gouraud.frag", Engine::Get().GetRenderer(), 3, 1);
 
     auto pipeline = std::make_shared<Pipeline>();
 
