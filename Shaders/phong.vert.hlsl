@@ -1,5 +1,7 @@
 #include "Lighting.hlsli"
 
+#define MAX_LIGHTS 8
+
 cbuffer VertexUniform : register(b0, space1)
 {
     float4x4 mvp;
@@ -10,7 +12,9 @@ cbuffer VertexUniform : register(b0, space1)
 
 cbuffer LightUniforms : register(b1, space1)
 {
-    Light light;
+    Light light[MAX_LIGHTS];
+    uint numLights;
+    float3 ambient;
 }
 
 cbuffer MaterialUniforms : register(b2, space1)
