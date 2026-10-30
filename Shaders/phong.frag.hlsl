@@ -1,5 +1,7 @@
 #include "Lighting.hlsli"
 
+#define MAX_LIGHTS 8
+
 Texture2D<float4>u_texture : register(t0, space2);
 SamplerState u_sampler : register(s0, space2);
 
