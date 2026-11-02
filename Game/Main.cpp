@@ -34,7 +34,7 @@ int main()
     // INITALIZATION
     Engine::Get().Initialize();
 
-    auto model = Resources().Get<Model>("models/plane.obj", Engine::Get().GetRenderer());
+    auto model = Resources().Get<Model>("models/sphere.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/lava_diffuse.png", Engine::Get().GetRenderer());
 
     auto vshader = Resources().Get<nu::Shader>("shaders/phong.vert", Engine::Get().GetRenderer(), 3);
