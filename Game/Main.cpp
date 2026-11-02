@@ -5,6 +5,7 @@
 #include "Renderer/VertexBuffer.h"
 #include "Renderer/IndexBuffer.h"
 #include "Renderer/Pipeline.h"
+#include "Framework/Scene.h"
 
 #include "Resources/ResourceManager.h"
 
@@ -33,6 +34,9 @@ int main()
 
     // INITALIZATION
     Engine::Get().Initialize();
+
+    Scene scene;
+    scene.Load("scenes/scene.json")
 
     auto model = Resources().Get<Model>("models/sphere.obj", Engine::Get().GetRenderer());
     auto texture = Resources().Get<Texture>("textures/lava_diffuse.png", Engine::Get().GetRenderer());
