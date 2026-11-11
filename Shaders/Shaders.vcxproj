@@ -30,6 +30,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Lighting.hlsli" />
+    <FxCompile Include="uniforms.hlsli">
+      <FileType>Document</FileType>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

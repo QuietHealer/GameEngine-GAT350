@@ -184,6 +184,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Build\Assets\Material\ogre.instance.json" />
+    <None Include="..\Build\Assets\Material\phong.material.json" />
+    <None Include="..\Build\Assets\Material\squirrel.instance.json" />
     <None Include="..\Build\Assets\scenes\scene.json" />
     <None Include="..\Build\Assets\SpaceGame\Tilemaps\world.json" />
   </ItemGroup>
