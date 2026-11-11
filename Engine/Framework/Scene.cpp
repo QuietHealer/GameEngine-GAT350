@@ -3,7 +3,10 @@
 #include "Actor.h"
 #include "Core/Factory.h"
 #include "Component.h"
-#include "Components/ColliderComponent.h"
+#include "Renderer/Renderer.h"
+#include "Components/CameraComponent.h"
+#include "Renderer/Light.h"
+#include "Components/LightComponent.h"
 
 namespace nu
 {
@@ -75,8 +78,6 @@ namespace nu
 			actor->Update(dt);
 		}
 
-		//UpdateCollisions();
-
 		for (auto& actor : m_actors)
 		{
 			if (actor->m_destroyed) actor->OnDestroy();
@@ -93,34 +94,45 @@ namespace nu
 		//m_pendingActors.clear();
 	}
 
-	void Scene::Draw(const class Renderer& renderer)
+	void Scene::Draw(const Renderer& renderer)
 	{
-		for (const auto& actor : m_actors)
+		FrameUniform frameUniform{};
+
+		auto camera = GetActorByName("Camera");
+		if (camera)
 		{
-			if (actor)
-				actor->Draw(renderer);
-		}
-	}
-	void Scene::UpdateCollisions()
-	{
-		for (auto& actorA : m_actors)
-		{
-			for (auto& actorB : m_actors)
+			auto cameraComponent = camera->GetComponent<CameraComponent>();
+			if (cameraComponent)
 			{
-				if (actorA == actorB || actorA->m_destroyed || actorB->m_destroyed) continue;
+				frameUniform.cameraPosition = camera->GetTransform().position;
+				frameUniform.view = cameraComponent->GetView();
+				frameUniform.projection = cameraComponent->GetProjection();
+				frameUniform.viewProjection = frameUniform.projection * frameUniform.view;
 
-				auto colliderA = actorA->GetComponent<ColliderComponent>();
-				auto colliderB = actorB->GetComponent<ColliderComponent>();
+				renderer.SetVertexUniform(UniformSlot::Frame, &frameUniform, sizeof(frameUniform));
+				renderer.SetFragmentUniform(UniformSlot::Frame, &frameUniform, sizeof(frameUniform));
+			}
+		}
+		LightUniform lightUniform{};
+		lightUniform.ambient = glm::vec3{ 0.2f };
 
-				if (!colliderA || !colliderB) continue;
-
-				if (colliderA->CheckCollision(*colliderB))
-				{
-					actorA->OnCollision(actorB.get());
-					actorB->OnCollision(actorA.get());
-				}
+		auto lights = GetActorByTag("Lights");
+		for (auto light : lights)
+		{
+			auto lightComponent = light->GetComponent<LightComponent>();
+			if (lightComponent)
+			{
+				lightUniform.lights[lightUniform.count++] = lightComponent->GetLightData();
 			}
 		}
 
+		renderer.SetVertexUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+		renderer.SetFragmentUniform(UniformSlot::Light, &lightUniform, sizeof(lightUniform));
+
+		for (const auto& actor : m_actors)
+		{
+			if (actor && actor->IsActive())
+				actor->Draw(renderer);
+		}
 	}
 }

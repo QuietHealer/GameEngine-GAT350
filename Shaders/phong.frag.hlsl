@@ -1,26 +1,27 @@
 #include "Lighting.hlsli"
+#include "uniforms.hlsli"
 
 #define MAX_LIGHTS 8
 
 Texture2D<float4>u_texture : register(t0, space2);
 SamplerState u_sampler : register(s0, space2);
 
-cbuffer VertexUniform : register(b0, space3)
+cbuffer ObjectUniform : register(OBJECT_SLOT, FRAGMENT_UNIFORM_SPACE)
 {
-    float4x4 mvp;
-    float4x4 model;
-    float3 cameraPosition;
-    float padding1;   
+    Object object;
 }
 
-cbuffer LightUniforms : register(b1, space3)
+cbuffer FrameUniforms : register(FRAME_SLOT, FRAGMENT_UNIFORM_SPACE)
 {
-    Light light[MAX_LIGHTS];
-    uint numLights;
-    float3 ambient;
+    Frame frame;
 }
 
-cbuffer MaterialUniforms : register(b2, space3)
+cbuffer LightUniforms : register(LIGHT_SLOT, FRAGMENT_UNIFORM_SPACE)
+{
+    Lights lights;
+}
+
+cbuffer MaterialUniforms : register(MATERIAL_SLOT, FRAGMENT_UNIFORM_SPACE)
 {
     Material material;
 }
@@ -42,14 +43,14 @@ Output main(Input input)
 	Output output;
     
     float4 albedo = u_texture.Sample(u_sampler, input.texcoord) * material.color;
-    float3 diffuse = ambient;
+    float3 diffuse = lights.ambient;
     float3 specular = 0;
     
     
-    float3 V = normalize(cameraPosition - input.worldPosition);
-    for (uint i = 0; i < numLights; i++)
+    float3 V = normalize(frame.cameraPosition - input.worldPosition);
+    for (uint i = 0; i < lights.count; i++)
     {
-        calculateLighting(light[i], material, input.worldPosition, normalize(input.normal), V, diffuse, specular);
+        calculateLighting(lights.lights[i], material, input.worldPosition, normalize(input.normal), V, diffuse, specular);
     }
     
     output.color = float4(albedo.rgb * diffuse + specular, albedo.a);

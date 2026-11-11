@@ -1,5 +1,7 @@
 #pragma once
 
+#define MAX_LIGHTS 8
+
 #define LIGHT_DIRECTIONAL  0
 #define LIGHT_POINT        1
 #define LIGHT_SPOT         2
@@ -21,10 +23,16 @@ struct Light
     float range;
     float3 color;
     float intensity;
-    float3 ambient;
     float innerCutoff;
     float outerCutoff;
-    float3 padding;
+    float2 padding;
+};
+
+struct Lights
+{
+    Light lights[MAX_LIGHTS];
+    float3 ambient;
+    uint count;
 };
 
 float calculateAttenuation(float distance, float range)
@@ -92,6 +100,6 @@ void calculateLighting(Light light, Material material, float3 position, float3 N
     // light arriving at the surface
     float3 radiance = light.color * light.intensity * attenuation;
 
-    diffuse = light.ambient + calculateDiffuse(radiance, N, L);
+    diffuse = calculateDiffuse(radiance, N, L);
     specular = calculateSpecular(radiance, N, L, V, material);
 }

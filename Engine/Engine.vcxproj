@@ -171,6 +171,11 @@
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="Components\CameraComponent.h" />
+    <ClInclude Include="Components\CameraControllerComponent.h" />
+    <ClInclude Include="Components\LightComponent.h" />
+    <ClInclude Include="Components\MaterialComponent.h" />
+    <ClInclude Include="Components\ModelComponent.h" />
     <ClInclude Include="Components\PhysicsComponent.h" />
     <ClInclude Include="Components\RendererComponent.h" />
     <ClInclude Include="Core\Factory.h" />
@@ -194,6 +199,9 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer\Font.h" />
     <ClInclude Include="Renderer\IndexBuffer.h" />
+    <ClInclude Include="Renderer\Light.h" />
+    <ClInclude Include="Renderer\Material.h" />
+    <ClInclude Include="Renderer\MaterialInstance.h" />
     <ClInclude Include="Renderer\Mesh.h" />
     <ClInclude Include="Renderer\Model.h" />
     <ClInclude Include="Renderer\ParticleSystem.h" />
@@ -201,6 +209,7 @@
     <ClInclude Include="Renderer\Renderer.h" />
     <ClInclude Include="Renderer\Shader.h" />
     <ClInclude Include="Renderer\Texture.h" />
+    <ClInclude Include="Renderer\Uniforms.h" />
     <ClInclude Include="Renderer\VertexBuffer.h" />
     <ClInclude Include="Resources\Resource.h" />
     <ClInclude Include="Resources\ResourceManager.h" />
@@ -209,6 +218,11 @@
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
     <ClInclude Include="Components\ColliderComponent.h" />
+    <ClCompile Include="Components\CameraComponent.cpp" />
+    <ClCompile Include="Components\CameraControllerComponent.cpp" />
+    <ClCompile Include="Components\LightComponent.cpp" />
+    <ClCompile Include="Components\MaterialComponent.cpp" />
+    <ClCompile Include="Components\ModelComponent.cpp" />
     <ClCompile Include="Components\PhysicsComponent.cpp" />
     <ClCompile Include="Core\File.cpp" />
     <ClCompile Include="Core\GameTime.cpp" />
@@ -225,6 +239,8 @@
     </ClCompile>
     <ClCompile Include="Renderer\Font.cpp" />
     <ClCompile Include="Renderer\IndexBuffer.cpp" />
+    <ClCompile Include="Renderer\Material.cpp" />
+    <ClCompile Include="Renderer\MaterialInstance.cpp" />
     <ClCompile Include="Renderer\Mesh.cpp" />
     <ClCompile Include="Renderer\Model.cpp" />
     <ClCompile Include="Renderer\ParticleSystem.cpp" />
